@@ -1,0 +1,44 @@
+name: Build AI Bubble APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "AI_Bubble_Android_Starter.zip"
+      - ".github/workflows/build-apk.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Extract project
+        run: |
+          unzip AI_Bubble_Android_Starter.zip
+          echo "Project extracted"
+
+      - name: Build APK
+        run: gradle -p AIBubble_Android_Starter assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AI-Bubble-APK
+          path: AIBubble_Android_Starter/app/build/outputs/apk/debug/app-debug.apk
