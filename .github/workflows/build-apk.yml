@@ -35,7 +35,8 @@ jobs:
           echo "Project extracted"
 
       - name: Build APK
-        run: gradle -p AIBubble_Android_Starter assembleDebug
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
